@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="bean" >
+	<class name="Profession" table="t_profession" >
+		<id name="id"  >
+			<generator class="native"></generator>
+		</id>
+		<property name="name"></property>
+		<set name="classes" inverse="true" cascade="save-update" lazy="true">
+			<key column="classes_profession_id"></key>
+			<one-to-many class="Classes"/>
+		</set>
+		<many-to-one cascade="save-update" name="college" class="College" column="profession_college_id" not-null="true" fetch="join"></many-to-one>
+	</class>
+</hibernate-mapping>

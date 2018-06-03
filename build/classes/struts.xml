@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- # struts.objectFactory = spring 将action的创建交给spring容器 struts.objectFactory.spring.autoWire 
+		= name spring负责装配Action依赖属性 -->
+	<constant name="struts.objectFactory" value="spring"></constant>
+	<!-- 指定struts2是否以开发模式运行
+			1.热加载主配置.(不需要重启即可生效)
+			2.提供更多错误信息输出,方便开发时的调试
+	 -->
+	<constant name="struts.devMode" value="true" />
+	<package name="demo" namespace="/" extends="struts-default,json-default">
+		<interceptors>
+			<!-- 注册拦截器 -->
+			<interceptor name="loginInterceptor" class="loginInterceptor"></interceptor>
+			<!-- 注册拦截器栈 -->
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="loginInterceptor">
+					<param name="excludeMethods">loginPage,login,toLogin,testjson,*</param>
+				</interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<!-- 指定包中的默认拦截器栈 -->
+		<default-interceptor-ref name="myStack"></default-interceptor-ref>
+		
+		<!-- Struts2项目默认首页 -->
+		<!-- 在默认情况下，我们一般希望，当我们在浏览器中输入127.0.0.1:8080/project_name时候跳到项目的首页，那么在struts中我们这么设置呢？光加上<default-action-ref name="user" />是不够的，因为struts2默认是index.jsp为首页，所以我们把index.jsp删除了就行了，struts2从web.xml中找到项目的入口index.jsp但是index.jsp不存在了，那么<default-action-ref name="user" />这个配置就起作用了。user是你设置的action。 -->
+		<default-action-ref name="indexAction"></default-action-ref>
+		
+		<!-- 定义全局结果集 -->
+		<global-results>
+			<result name="login" type="dispatcher">/login.jsp</result>
+			<result name="toLogin" type="redirect">/loginAction</result>
+			<result name="error">/error.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping result="error"
+				exception="java.lang.RuntimeException"></exception-mapping>
+		</global-exception-mappings>
+
+		<!-- 整合方案1:class属性上仍然配置action的完整类名 struts2仍然创建action,由spring负责组装Action中的依赖属性 -->
+		<!-- 整合方案2:class属性上填写spring中action对象的BeanName 完全由spring管理action生命周期,包括Action的创建 
+			注意:需要手动组装依赖属性 -->
+		<action name="UserAction_*" class="userAction" method="{1}">
+			<result name="toHome" type="redirect">/index.htm</result>
+			<!-- <result name="error" >/login.jsp</result> -->
+			<result name="success">/index.html</result>
+		</action>
+		<action name="studentAction" class="studentAction" method="execute">
+			<result name="success">/studentHome.jsp</result>
+		</action>
+		<action name="studentAction_*" class="studentAction"
+			method="{1}">
+			<result name="toHome" type="redirect">/index.jsp</result>
+			<result name="success">/index.html</result>
+			<result name="json" type="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		<action name="adminAction_*" class="adminAction" method="{1}">
+			<result name="success" type="redirect">/adminAction_show</result>
+			<result name="toShow" type="redirect">/adminAction_show</result>
+			<!-- 使用重定向在jsp中取不到ActionContext中的值 -->
+			<result name="SysAdminHome" type="dispatcher">/userManage.jsp</result>
+			<result name="toSysAdminHome" type="redirect">/userManage.jsp</result>
+			<result name="adminJson" type="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		<action name="loginAction_*" class="loginAction" method="{1}">
+			<result name="toAdminAction_show" type="redirect">/adminAction_show</result>
+			<result name="toSysAdminHome" type="redirect">/userManage.jsp</result>
+			<result name="SysAdminHome" type="dispatcher">/userManage.jsp</result>
+			<result name="toStudentAction" type="redirect">/studentAction</result>
+		</action>
+		<action name="loginAction" class="loginAction" method="loginPage">
+		</action>
+		<action name="logoutAction" class="logoutAction">
+			<result name="toSysAdminHome" type="redirect">/indexAction</result>
+		</action>
+		<action name="login222222" class="userLoginAction">
+			<!-- <result name="error" >/login.jsp</result> -->
+			<result name="success">/index.html</result>
+		</action>
+		<action name="indexAction" class="indexAction">
+			<result name="index">/userManage.jsp</result>
+		</action>
+		<action name="listStudentAction" class="listStudentAction">
+			<result name="json" type="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		<action name="statisticsAction" class="statisticsAction" method="show">
+			<result name="show" type="dispatcher">/statistics.jsp</result>  
+		</action>
+		<action name="statisticsAction_*" class="statisticsAction" method="{1}">
+			<result name="json"></result>  
+		</action>
+		<action name="messageAction" class="statisticsAction">
+			<result name="success" type="dispatcher">/messageManage.jsp</result>  
+		</action>
+		<action name="collegeAction_*" class="collegeAction" method="{1}">
+			<result name="list" type="json">
+				<param name="root">dataMap</param>
+			</result>  
+		</action>
+		<action name="professionAction_*" class="professionAction" method="{1}">
+			<result name="json" type="json">
+				<param name="root">dataMap</param>
+			</result>  
+		</action>
+		<action name="classesAction_*" class="classesAction" method="{1}">
+			<result name="json" type="json">
+				<param name="root">dataMap</param>
+			</result>  
+		</action>
+		<action name="goingAction_*" class="goingAction" method="{1}">
+			<result name="json" type="json">
+				<param name="root">dataMap</param>
+			</result>  
+		</action>
+		<action name="goingRecordAction_*" class="goingRecordAction" method="{1}">
+			<result name="json" type="json">
+				<param name="root">dataMap</param>
+			</result>  
+		</action>
+		<action name="timecardAction_*" class="timecardAction" method="{1}">
+			<result name="json" type="json">
+				<param name="root">dataMap</param>
+			</result>  
+		</action>
+		
+		
+	</package>
+	<package name="json" namespace="/test" extends="struts-default,json-default" >  
+        <action name="getAllStudents" class="jsonAction" method="getAllStudents">  
+            <result name="success" type="json">  
+                <!-- 这里指定将被Struts2序列化的属性，该属性在action中必须有对应的getter方法 -->  
+                <param name="root">dataMap</param>  
+            </result>  
+        </action> 
+        <action name="testjson" class="jsonAction" method="json">  
+            <result name="success" type="json">  
+                <!-- 这里指定将被Struts2序列化的属性，该属性在action中必须有对应的getter方法 -->  
+                <param name="root">dataMap</param>  
+            </result>  
+        </action> 
+        <action name="testgetadmin" class="adminAction" method="get">
+            <result name="adminJson" type="json">  
+                <!-- 这里指定将被Struts2序列化的属性，该属性在action中必须有对应的getter方法 -->  
+                <param name="root">dataMap</param>  
+            </result>
+		</action> 
+    </package>  
+</struts>
+	

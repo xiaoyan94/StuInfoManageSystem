@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="bean" >
+	<class name="GoingRecord" table="t_going_record" >
+		<id name="goingRecordId"  >
+			<generator class="native"></generator>
+		</id>
+		<many-to-one name="going" cascade="save-update" class="Going" column="goingrecord_going_id"></many-to-one>
+		<property name="leavingTime"></property>
+		<property name="returningTime"></property>
+		<property name="remark"></property>
+		<property name="workName"></property>
+		<property name="workLinkmanName"></property>
+		<property name="workTel"></property>
+		<property name="workAddress"></property>
+		<one-to-one name="student" cascade="save-update" class="Student" property-ref="goingRecord"></one-to-one>
+	</class>
+</hibernate-mapping>

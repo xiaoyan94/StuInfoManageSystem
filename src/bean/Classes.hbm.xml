@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="bean" >
+	<class name="Classes" table="t_class">
+		<id name="id"  >
+			<generator class="native"></generator>
+		</id>
+		<property name="name"></property>
+		<many-to-one cascade="save-update" name="profession" class="Profession" column="classes_profession_id" not-null="true"></many-to-one>
+		<!-- 一的一方中的inverse="true"表示由多的一端来管理关联关系,
+			  不管一的一端是否管理关系,都由多的一端来维护关系. -->
+		<set lazy="true" name="students" inverse="true" cascade="save-update">
+			<key column="stu_classes_id"></key>
+			<one-to-many class="Student"/>
+		</set>
+	</class>
+</hibernate-mapping>

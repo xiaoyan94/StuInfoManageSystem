@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>签到效果实现</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- Compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+<script type="text/javascript"
+	src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/sign.css" />
+<script type="text/javascript" src="js/myjs/calendar.js"></script>
+<script type="text/javascript">
+		$(function() {
+			//ajax获取日历json数据
+			var signList = [ {
+				"signDay" : "10"
+			}, {
+				"signDay" : "11"
+			}, {
+				"signDay" : "12"
+			}, {
+				"signDay" : "1"
+			}, {
+				"signDay" : "2"
+			}, {
+				"signDay" : "21"
+			}, {
+				"signDay" : "22"
+			}, {
+				"signDay" : "23"
+			} ];
+			calUtil.init(signList);
+		});
+	</script>
+</head>
+<body>
+	<div style="width: 300px; height: 300px;" id="calendar"></div>
+</body>
+</html>
