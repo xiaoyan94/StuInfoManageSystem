@@ -9,6 +9,7 @@ import bean.Admin;
 public interface AdminDao {
 	void saveAdmin(Admin admin);
 
+	Admin load(Long id);
 	Admin getAdmin(DetachedCriteria dc);
 
 	List<Admin> getAdminList(DetachedCriteria dc);

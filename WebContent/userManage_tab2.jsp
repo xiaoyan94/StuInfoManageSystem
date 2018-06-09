@@ -36,17 +36,10 @@
 	<div class="section"></div>
 	<!-- 分页 -->
 	<div class="row center">
-		<ul class="pagination">
+		<ul class="pagination" id="students_pager">
 		    <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
 		    <li class="active blue lighten-2"><a href="#!">1</a></li>
 		    <li class="waves-effect"><a href="#!">2</a></li>
-		    <li class="waves-effect"><a href="#!">3</a></li>
-		    <li class="waves-effect"><a href="#!">4</a></li>
-		    <li class="waves-effect"><a href="#!">5</a></li>
-		    <li class="waves-effect"><a href="#!">6</a></li>
-		    <li class="waves-effect"><a href="#!">7</a></li>
-		    <li class="waves-effect"><a href="#!">8</a></li>
-		    <li class="waves-effect"><a href="#!">9</a></li>
 		    <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
 		</ul>
 	</div>
@@ -247,6 +240,72 @@
 	  </div>
 	</div>
 	<!-- ------------------------ -->
+<!-- 搜索表单开始 -->
+     <div id="search_student_modal" class="modal">
+     	<div class="modal-content">
+     	<h4>请输入搜索条件</h4>
+       <form id="search_student_form" class="col s12" method="post">
+         <div class="row">
+           <div class="input-field col s4 ">
+             <input id="search_student_id" name="id" type="text" class="validate required" data-length="20">
+             <label for="search_student_id">学号</label>
+           </div>
+           <div class="input-field col s3 ">
+             <input id="search_student_name" name="name" type="text" class="validate required" data-length="20">
+             <label for="search_student_name">姓名</label>
+           </div>
+           <div class="input-field col s5">
+                  <label> <span>性别</span></label> 
+                  <div class="col s10 offset-s2">
+                  	<input checked required="required" id="add_student_buxian" name="sex" type="radio" value="" />
+               		<label for="add_student_buxian">不限</label>
+                    <input required="required" id="search_student_nan" name="sex" type="radio" value="男" />
+                    <label for="search_student_nan">男</label>
+                    <input required="required" class="" id="search_student_nv" name="sex" type="radio" value="女" />
+                    <label for="search_student_nv">女</label>
+                  </div>
+           </div>
+         </div>
+         <div class="row">
+           <div class="input-field col s4 ">
+             <input id="search_student_idCard" name="idCard" type="text" class="validate required" data-length="20">
+             <label for="search_student_idCard">身份证号</label>
+           </div>
+           <div class="input-field col s4 ">
+             <input id="search_student_workAddress" name="workAddress" type="text" class="validate required" data-length="20">
+             <label for="search_student_workAddress">去向单位地址</label>
+           </div>
+           <div class="input-field col s4 ">
+             <input id="search_student_tel" name="tel" type="text" class="validate required" data-length="20">
+             <label for="search_student_tel">手机号</label>
+           </div>
+         </div>
+         <div class="row">
+           <div class="input-field col s4 ">
+             <input id="search_student_classes_name" name="classes_name" type="text" class="validate required" data-length="20">
+             <label for="search_student_classes_name">班级名称</label>
+           </div>
+           <div class="input-field col s4 ">
+             <input id="search_student_profession_name" name="profession_name" type="text" class="validate required" data-length="20">
+             <label for="search_student_profession_name">专业名称</label>
+           </div>
+           <div class="input-field col s4 ">
+             <input id="search_student_college_name" name="college_name" type="text" class="validate required" data-length="20">
+             <label for="search_student_college_name">学院名称</label>
+           </div>
+         </div>
+         <div class="row">
+           <div onclick="submit_search_student_form()" class="input-field col s12 waves-effect waves-light btn">搜索</div>
+         </div>
+       </form>
+     	</div>
+     	<%-- <div class="modal-footer">
+     		<a href="" class="modal-action modal-close waves-effect waves-green red btn waves-light">确认<i class="material-icons right">send</i></a>
+       <span class="right">&nbsp;&nbsp;</span>
+       <a href="javascript:void(0);" class="modal-action modal-close waves-effect waves-green btn waves-light">取消<i class="material-icons right">cancel</i></a>
+     	</div> --%>
+     </div>
+     <!-- 搜索表单结束 -->
 	<div id="add_student" class="modal">
       	<div class="modal-content">
       	<div class="row">
@@ -361,10 +420,16 @@
       	</div> --%>
       </div>
 	<!-- ---------------- -->
-	<div class="fixed-action-btn">
-       <a id="add_student_btn" onclick="add_student()" href="#add_student" class="btn-floating btn-large red pulse tooltipped modal-trigger" data-position="top" data-tooltip="添加学生" >
-         <i class="large material-icons">add</i>
-       </a>
+	<div class="fixed-action-btn horizontal">
+       <a href="#search_student_modal" class="btn-floating btn-large pulse green darken-1 tooltipped modal-trigger" data-position="top" data-tooltip="搜索"><i class="material-icons">search</i></a>
+		<ul>
+			<li>
+       			<a id="add_student_btn" onclick="add_student()" href="#add_student" class="btn-floating  red pulse tooltipped modal-trigger" data-position="top" data-tooltip="添加学生" >
+        		 <i class="large material-icons">add</i>
+       			</a>
+    	    </li>
+			<!-- <li><a class="btn-floating green darken-1 tooltipped modal-trigger" data-position="top" data-tooltip="搜索"><i class="material-icons">search</i></a></li> -->
+		</ul>
      </div>
 	</div>
 </body>

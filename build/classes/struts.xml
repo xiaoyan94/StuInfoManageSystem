@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-  <!DOCTYPE struts PUBLIC
-	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
-	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
 
 <struts>
 	<!-- # struts.objectFactory = spring 将action的创建交给spring容器 struts.objectFactory.spring.autoWire 
@@ -129,6 +129,11 @@
 			</result>  
 		</action>
 		<action name="timecardAction_*" class="timecardAction" method="{1}">
+			<result name="json" type="json">
+				<param name="root">dataMap</param>
+			</result>  
+		</action>
+		<action name="noticeAction_*" class="noticeAction" method="{1}">
 			<result name="json" type="json">
 				<param name="root">dataMap</param>
 			</result>  

@@ -512,16 +512,41 @@ function refresh_college_list() {
 }
 //--------------------------------------------------------
 function refresh_student_list(){
+	var params={currentPage:1};
+	search_student(params);
+}
+function submit_search_student_form(){
+//	表单序列化 x形式如下
+//	[ 
+//	  {name: 'lastname', value: 'World'},
+//	  {name: 'alias'}, // 值为空
+//	]
+	var params = {};//查询条件 json类型
+	x=$('#search_student_form').serializeArray();
+	$.each(x, function(i, field){
+		//遍历JSON数组
+		//alert(field.name + ":" + field.value + " ");
+		params[field.name] = field.value;
+	});
+	console.log(params);
+	search_student(params);
+	$('#search_student_modal').modal('close');
+}
+/**
+ * 查询带分页 更新显示数据
+ * @param params JSON格式查询参数
+ * @returns
+ */
+function search_student(params){
 	$('#student_list_table').empty();
+	params.pageSize=10;
 	$.ajax({
-	    "url" : "${pageContext.request.contextPath}/studentAction_list",
-//	    "data" : {
-//	      "id" : id
-//	    },
+	    "url" : "${pageContext.request.contextPath}/studentAction_search",
+	    "data" : params,
 	    "dataType" : "json",
 	    "success" : function(data) {
-	    	Materialize.toast('获取到'+data.students.length+"条数据", 4000, 'rounded')
-	    	for( var i=0;i<data.students.length;i++){
+	    	Materialize.toast('一共'+data.totalCount+"条数据", 4000, 'rounded')
+	    	for(var i=0;i<data.students.length;i++){
 	    		var  row = `
 	    		<tr>
 	    			<td>${i+1}</td>
@@ -537,12 +562,57 @@ function refresh_student_list(){
 	    			</tr>
 	    			`;
 	    		$('#student_list_table').append(row);
-	    	}
-	    	Materialize.toast('刷新成功', 4000, 'rounded');
+	    	}//生成表格结束
+	    	
+	    	create_pagination('#students_pager',data,'search_student');
+//	    	$('#students_pager').empty();
+//	    	var pre;
+//	    	if(data.currentPage==1){
+//	    		pre = `<li class="disabled"><a href="javascript:Materialize.toast('没有更多数据啦', 2000, 'rounded')"><i class="material-icons">chevron_left</i></a></li>`;
+//	    	}else{
+//	    		pre = `<li class="waves-effect"><a href="javascript:search_student({currentPage:${data.currentPage-1}})"><i class="material-icons">chevron_left</i></a></li>`;
+//	    	}
+//	    	$('#students_pager').append(pre);
+//	    	for(var i = data.currentPage>4 ? data.currentPage-4 : 0;i<data.totalPage && i<data.currentPage+3;i++){
+//	    		var li = `<li class="waves-effect ${data.currentPage==i+1?' active blue lighten-2':' '}"><a href="javascript:search_student({currentPage:${i+1}})">${i+1}</a></li>`;
+//	    		$('#students_pager').append(li);
+//	    	}//生成分页数据
+//	    	var next;
+//	    	if(data.currentPage==data.totalPage){
+//	    		next = `<li class="disabled"><a href="javascript:Materialize.toast('没有更多数据啦', 2000, 'rounded')"><i class="material-icons">chevron_right</i></a></li>`;
+//	    	}else{
+//	    		next = `<li class="waves-effect"><a href="javascript:search_student({currentPage:${data.currentPage+1}})"><i class="material-icons">chevron_right</i></a></li>`;
+//	    	}
+//	    	$('#students_pager').append(next);
+//	    	var total=`<li class="waves-effect"><a>共${data.totalPage}页</a></li>`;
+//	    	$('#students_pager').append(total);
 	    },
 	    "async" : true//false 同步请求
 	});
-	
+}
+//生成分页导航
+function create_pagination(selector,data,function_name){
+	$(selector).empty();
+	var pre;
+	if(data.currentPage==1){
+		pre = `<li class="disabled"><a href="javascript:Materialize.toast('没有更多数据啦', 2000, 'rounded')"><i class="material-icons">chevron_left</i></a></li>`;
+	}else{
+		pre = `<li class="waves-effect"><a href="javascript:${function_name}({currentPage:${data.currentPage-1}})"><i class="material-icons">chevron_left</i></a></li>`;
+	}
+	$(selector).append(pre);
+	for(var i = data.currentPage>4 ? data.currentPage-4 : 0;i<data.totalPage && i<data.currentPage+3;i++){
+		var li = `<li class="waves-effect ${data.currentPage==i+1?' active blue lighten-2':' '}"><a href="javascript:${function_name}({currentPage:${i+1}})">${i+1}</a></li>`;
+		$(selector).append(li);
+	}//生成分页数据
+	var next;
+	if(data.currentPage==data.totalPage){
+		next = `<li class="disabled"><a href="javascript:Materialize.toast('没有更多数据啦', 2000, 'rounded')"><i class="material-icons">chevron_right</i></a></li>`;
+	}else{
+		next = `<li class="waves-effect"><a href="javascript:${function_name}({currentPage:${data.currentPage+1}})"><i class="material-icons">chevron_right</i></a></li>`;
+	}
+	$(selector).append(next);
+	var total=`<li class="waves-effect"><a>第${data.currentPage}页，共${data.totalPage}页</a></li>`;
+	$(selector).append(total);
 }
 function add_student(){
 	$.ajax({
@@ -604,7 +674,8 @@ function add_student_ajax(){
 		"success" : function(data) {
 			if(data.status == 'success'){
 				Materialize.toast('添加成功', 4000, 'rounded')
-				refresh_student_list();
+				//refresh_student_list();
+				submit_search_student_form();
 			}else{
 				if(data.msg!=null){
 					Materialize.toast('添加失败：'+data.msg, 4000, 'rounded')
@@ -711,7 +782,8 @@ function edit_student_ajax() {
 		"success" : function(data) {
 			if(data.status == 'success'){
 				Materialize.toast('更新成功', 4000, 'rounded')
-				refresh_student_list();
+				//refresh_student_list();
+				submit_search_student_form();
 			}else{
 				if(data.msg!=null){
 					Materialize.toast('更新失败：'+data.msg, 4000, 'rounded')
@@ -737,7 +809,8 @@ function delete_student_ajax(id){
 	    "success" : function(data) {
 	    	if(data.status == 'success'){
 	    		Materialize.toast('删除成功', 2000, 'rounded')
-	    		refresh_student_list();
+	    		//refresh_student_list();
+				submit_search_student_form();
 	    	}else{
 	    		Materialize.toast('删除失败', 2000, 'rounded')
 	    	}

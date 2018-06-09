@@ -24,7 +24,6 @@ function refresh_echart2() {
 	    "dataType" : "json",
 	    "success" : function(data) {
 	    	Materialize.toast('获取到'+data.length+"条数据", 2000, 'rounded')
-	    	
 	    	init_echart2(data);
 	    },
 	    "async" : true//false 同步请求
@@ -176,10 +175,10 @@ myChart.on('click', function(param) {
     //console.log(param);
     var name = param.data.name;
     if(name=='已签到'){
-    	Materialize.toast('刷新今日已签到学生列表', 4000, 'rounded');
+    	//Materialize.toast('刷新今日已签到学生列表', 4000, 'rounded');
         $('#yiqiandao').modal('open');
     }else if(name=='未签到'){
-    	Materialize.toast('刷新今日未签到学生列表', 4000, 'rounded');
+    	//Materialize.toast('刷新今日未签到学生列表', 4000, 'rounded');
         $('#weiqiandao').modal('open');
 //        $('#p').text('111');
     }

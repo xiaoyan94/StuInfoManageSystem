@@ -54,6 +54,77 @@
         <a href="javascript:void(0);" onclick="Materialize.toast('操作已取消', 4000, 'rounded')" class="modal-action modal-close waves-effect waves-green btn waves-light">取消<i class="material-icons right">cancel</i></a>
       </div>
     </div>
+    <!-- 删除确认 -->
+    <div id="delete_notice_modal" class="modal">
+      <div class="modal-content">
+        <h4>删除确认</h4>
+        <p>您确认删除这条通知吗？</p>
+      </div>
+      <div class="progress" style="display: none">
+	      	<div class="indeterminate"></div>
+		</div>  
+      <div class="modal-footer">
+        <a id='delete_notice_btn' href="#!" onclick="delete_notice_ajax(id)" class="waves-effect waves-green red btn waves-light">是的，删除<i class="material-icons right">send</i></a>
+        <span class="right">&nbsp;&nbsp;</span>
+        <a href="javascript:void(0);" onclick="Materialize.toast('操作已取消', 4000, 'rounded')" class="modal-action modal-close waves-effect waves-green btn waves-light">取消操作<i class="material-icons right">cancel</i></a>
+      </div>
+    </div>
+    <!-- 添加表单 -->
+    <div id="add_notice_modal" class="modal">
+	   	<div class="modal-content">
+	   	<h4>发布通知/公告</h4>
+	    <form class="col s12" action="javascript:;">
+	       <div class="row">
+	         <div class="input-field col s12 ">
+	           <i class="material-icons prefix">spa</i>
+	           <input required="required" id="add_notice_title" name="title" type="text" class="validate required" data-length="20">
+	           <label for="add_notice_title">请输入标题</label>
+	         </div>
+	       </div>
+	       <div class="row">
+	         <div class="input-field col s12">
+	           <i class="material-icons prefix">edit</i>
+	           <textarea id="add_notice_content" name="content" class="materialize-textarea"></textarea>
+	           <label for="add_notice_content">请输入内容</label>
+	         </div>
+	         
+	       </div>
+		   <div class="progress" style="display: none">
+	      		<div class="indeterminate"></div>
+		   </div>     
+	       <div class="row">
+	         <div class="modal-action modal-close input-field col s4 right waves-effect waves-light btn">取消操作</div>
+	         <div id="add_notice_btn" onclick="add_notice()" class="input-field col s4 waves-effect waves-light btn">确认发布</div>
+	       </div>
+	     </form>
+	   	</div>
+	   	<%-- <div class="modal-footer">
+	   		<a href="" class="modal-action modal-close waves-effect waves-green red btn waves-light">确认<i class="material-icons right">send</i></a>
+	     <span class="right">&nbsp;&nbsp;</span>
+	     <a href="javascript:void(0);" class="modal-action modal-close waves-effect waves-green btn waves-light">取消<i class="material-icons right">cancel</i></a>
+	   	</div> --%>
+	   </div>
+	   <!-- 添加表单结束 -->
+	   <!-- 搜索表单开始 -->
+     <div id="search_notice_modal" class="modal">
+     	<div class="modal-content">
+        <form id="search_notice_form" action="javascript:submit_search_notice_form()" class="col s12" method="post">
+         <div class="row">
+           <div class="input-field col s10">
+             <input id="search_notice_key" name="searchKey" type="text" class="validate required" data-length="20">
+             <label for="search_notice_key">请输入搜索关键词</label>
+           </div>
+	       <div onclick="submit_search_notice_form()" class="input-field col s2 modal-action modal-close waves-effect waves-light btn">搜索</div>
+         </div>
+       </form>
+     	</div>
+     	<%-- <div class="modal-footer">
+     		<a href="" class="modal-action modal-close waves-effect waves-green red btn waves-light">确认<i class="material-icons right">send</i></a>
+       <span class="right">&nbsp;&nbsp;</span>
+       <a href="javascript:void(0);" class="modal-action modal-close waves-effect waves-green btn waves-light">取消<i class="material-icons right">cancel</i></a>
+     	</div> --%>
+     </div>
+     <!-- 搜索表单结束 -->
     <!-- DROPDOWN -->
     <ul id="dropdown1" class="dropdown-content">
       <li><a href="#!">个人信息</a></li>
@@ -70,7 +141,11 @@
           <li><a href="statisticsAction">信息统计</a></li>
           <li><a href="adminAction">信息管理</a></li>
           <li class="active"><a href="#!">沟通交流</a></li>
-          <li><a href="#!" class="dropdown-button" data-activates="dropdown1" data-beloworigin="true">欢迎您，<s:property value="#session.user.adminRealName"/><i class="material-icons right">arrow_drop_down</i></a></li>
+          <li>
+	          <a href="#!" class="dropdown-button" data-activates="dropdown1" data-beloworigin="true">
+	          	欢迎您，<s:property value="#session.user.adminRealName"/>
+	          	<input hidden="hidden" id="admin_id" value="${user.adminId }"></input>
+	          <i class="material-icons right">arrow_drop_down</i></a></li>
         </ul>
         <ul id="dropdown1" class="dropdown-content">
           <li><a href="#!">个人信息</a></li>
@@ -81,8 +156,8 @@
       </div>
       <div class="nav-content">
         <ul id="tab1" class="tabs tabs-transparent">
-            <li class="tab col s3"><a class="active" href="#liuyan_tab">留言管理</a></li>
-            <li class="tab col s3"><a href="#notice_tab">公告管理</a></li>
+            <li class="tab col s3"><a onclick="refresh_notice_list()" class="active" href="#notice_tab">公告管理</a></li>
+            <li class="tab col s3"><a href="#liuyan_tab">留言管理</a></li>
             <li class="tab col s3 disabled"><a href="#test3">在线聊天</a></li>
             <li class="tab col s3"><a href="#test4">更多</a></li>
         </ul>
@@ -90,34 +165,67 @@
     </nav>
     <div class="section"></div>
     <div class="container" style="width: 80%">
+    	<div id='preloading' style="text-align: center;">
+    		<div style="height: 200px;">
+    		</div>
+		    <div class="preloader-wrapper big active">
+		      <div class="spinner-layer spinner-blue">
+		        <div class="circle-clipper left">
+		          <div class="circle"></div>
+		        </div><div class="gap-patch">
+		          <div class="circle"></div>
+		        </div><div class="circle-clipper right">
+		          <div class="circle"></div>
+		        </div>
+		      </div>
+		
+		      <div class="spinner-layer spinner-red">
+		        <div class="circle-clipper left">
+		          <div class="circle"></div>
+		        </div><div class="gap-patch">
+		          <div class="circle"></div>
+		        </div><div class="circle-clipper right">
+		          <div class="circle"></div>
+		        </div>
+		      </div>
+		
+		      <div class="spinner-layer spinner-yellow">
+		        <div class="circle-clipper left">
+		          <div class="circle"></div>
+		        </div><div class="gap-patch">
+		          <div class="circle"></div>
+		        </div><div class="circle-clipper right">
+		          <div class="circle"></div>
+		        </div>
+		      </div>
+		
+		      <div class="spinner-layer spinner-green">
+		        <div class="circle-clipper left">
+		          <div class="circle"></div>
+		        </div><div class="gap-patch">
+		          <div class="circle"></div>
+		        </div><div class="circle-clipper right">
+		          <div class="circle"></div>
+		        </div>
+		      </div>
+		    </div>
+		   <div>
+		    <font face="Microsoft YaHei">正在加载...</font>
+		   </div>
+		</div>
+    
 		<div id="notice_tab" class="col s12">
-		  <ul class="collapsible popout" data-collapsible="expandable">
-		    <li class="active">
-		      <div class="collapsible-header active">
-		      <i class="material-icons">filter_drama</i>
-		   		   公告标题一
-		      <a class="right">发布时间：2018-09-09</a>
-		      </div>
-		      <div class="collapsible-body">
-		      	<div class="row">
-		      	<p>内容：人的一生，其实就是一场自己对自己的战争。</p>
-		      	<a class="right waves-effect waves-light btn tooltipped" data-position="bottom" data-tooltip="详情" href="#!" onclick="details_admin('<s:property value="#admin.adminId"/>')"><i class="material-icons left">delete</i>
-		      	删除
-		      	</a>
-		      	</div>
-		      </div>
-		    </li>
+		  <ul id="notice_ul" class="collapsible popout" data-collapsible="expandable">
+		    
 		  </ul>
 		  
-		  <div class="fixed-action-btn">
-          <a class="btn-floating btn-large red oulse">
+		<div class="fixed-action-btn">
+          <a href="#!" onclick="get_add_focus()" class="btn-floating btn-large red oulse">
             <i class="large material-icons">add</i>
           </a>
           <ul>
-            <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
-            <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
-            <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
-            <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+            <li><a class="btn-floating green"><i class="material-icons">attach_file</i></a></li>
+            <li><a onclick="get_search_focus()" href="#!" class="btn-floating blue"><i class="material-icons">search</i></a></li>
           </ul>
         </div>
 		</div>
@@ -204,6 +312,7 @@
         //   enterDelay:1,
         //   inDuration:1
         // });
+        refresh_notice_list();
       });
       
       //Materialize.toast('Hello,<s:property value="#session.user.adminRealName"/>', 4000, 'rounded');
@@ -213,6 +322,7 @@
       // $(":radio").css("opacity","1");
     </script>
     <script type="text/javascript" src="js/myjs/userManage.js"></script>
+    <script type="text/javascript" src="js/myjs/message.js"></script>
   </body>
 </html>
     

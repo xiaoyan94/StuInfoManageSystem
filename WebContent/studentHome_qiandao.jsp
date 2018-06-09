@@ -30,8 +30,11 @@
 			</div> -->
 					
 			<div>
+			<div>
+				<img src="https://tool.lu/netcard/">
+			</div>
 			<ul id="timecards" class="collection with-header">
-		        <li class="collection-header"><h6>签到记录</h6></li>
+		        <li class="collection-header"><h6>最近签到</h6></li>
 		        <li class="collection-item"><div>2018-5-5 10：10<a href="#!" class="secondary-content"><i class="material-icons">check</i></a></div></li>
 			</ul>
 			</div>

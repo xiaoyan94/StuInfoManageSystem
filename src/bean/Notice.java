@@ -38,13 +38,19 @@ public class Notice {
 	public void setAdmin(Admin admin) {
 		this.admin = admin;
 	}
-	public Notice(Long id, String title, String content, Timestamp time, Admin admin) {
+	public Notice(String title, String content, Timestamp time, Admin admin) {
 		super();
-		this.id = id;
 		this.title = title;
 		this.content = content;
 		this.time = time;
 		this.admin = admin;
 	}
+	public Notice() {};
+	@Override
+	public String toString() {
+		return "Notice [id=" + id + ", title=" + title + ", content=" + content + ", time=" + time + ", admin=" + admin
+				+ "]";
+	}
+	
 	
 }

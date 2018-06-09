@@ -66,4 +66,12 @@ public class Student {
 	public void setGoingRecord(GoingRecord goingRecord) {
 		this.goingRecord = goingRecord;
 	}
+	@Override
+	public String toString() {
+		return "Student [id=" + id + ", name=" + name + ", sex=" + sex + ", idCard=" + idCard + ", tel=" + tel
+				+ ", passwd=" + passwd + ", classes=" + classes + ", timecards=" + timecards + ", goingRecord="
+				+ goingRecord + "]";
+	}
+	
+	
 }

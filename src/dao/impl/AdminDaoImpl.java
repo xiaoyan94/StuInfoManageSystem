@@ -3,7 +3,10 @@ package dao.impl;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
+import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 import org.springframework.util.CollectionUtils;
 
@@ -43,6 +46,16 @@ public class AdminDaoImpl extends HibernateDaoSupport implements AdminDao {
 	@Override
 	public void update(Admin admin) {
 		getHibernateTemplate().update(admin);
+	}
+
+	@Override
+	public Admin load(Long id) {
+		return getHibernateTemplate().execute(new HibernateCallback<Admin>() {
+			@Override
+			public Admin doInHibernate(Session session) throws HibernateException {
+				return session.load(Admin.class, id);
+			}
+		});
 	}
 
 }

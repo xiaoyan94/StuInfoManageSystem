@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.util.CollectionUtils;
 
 import com.opensymphony.xwork2.ActionContext;
@@ -19,6 +20,9 @@ import service.ClassesService;
 import service.GoingRecordService;
 import service.GoingService;
 import service.StudentService;
+import utils.MyStringUtil;
+import utils.Pager;
+import utils.PagerUtil;
 
 public class StudentAction extends ActionSupport {
 	private StudentService stuService;
@@ -50,12 +54,58 @@ public class StudentAction extends ActionSupport {
 	private String tel;
 	private Long stu_classes;
 	private Long stu_going;
+	private String classes_name;
+	private String college_name;
+	private String profession_name;
 	
+	public String getClasses_name() {
+		return classes_name;
+	}
+
+	public void setClasses_name(String classes_name) {
+		this.classes_name = classes_name;
+	}
+
+	public String getCollege_name() {
+		return college_name;
+	}
+
+	public void setCollege_name(String college_name) {
+		this.college_name = college_name;
+	}
+
+	public String getProfession_name() {
+		return profession_name;
+	}
+
+	public void setProfession_name(String profession_name) {
+		this.profession_name = profession_name;
+	}
+
 	private String workName;
 	private String workLinkmanName;
 	private String workTel;
 	private String workAddress;
 	
+	private int currentPage;
+	private int pageSize;
+	
+	public int getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -222,10 +272,64 @@ public class StudentAction extends ActionSupport {
 		}
 		return "json";
 	}
+	public String search() throws Exception{
+		DetachedCriteria dc = DetachedCriteria.forClass(Student.class);
+		//添加查询条件
+		if(MyStringUtil.isNotEmpty(name)) {
+			dc.add(Restrictions.like("name", "%"+name+"%"));
+		}
+		if(MyStringUtil.isNotEmpty(id)) {
+			//数值类型的模糊查询需要使用下面这种方式
+			dc.add(Restrictions.sqlRestriction("id like (?)", "%"+id+"%", StandardBasicTypes.STRING));
+		}
+		if(MyStringUtil.isNotEmpty(sex)) {
+			dc.add(Restrictions.like("sex", sex));
+		}
+		if(MyStringUtil.isNotEmpty(idCard)) {
+			dc.add(Restrictions.like("idCard", "%"+idCard+"%"));
+		}
+		if(MyStringUtil.isNotEmpty(workAddress)) {
+			dc = dc.createCriteria("goingRecord")
+					.add(Restrictions.like("workAddress", "%"+workAddress+"%"))
+					.createCriteria("student");
+		}
+		if(MyStringUtil.isNotEmpty(tel)) {
+			dc.add(Restrictions.like("tel", "%"+tel+"%"));
+		}
+		if(MyStringUtil.isNotEmpty(classes_name)) {
+			dc = dc.createCriteria("classes");
+			dc.add(Restrictions.like("name", "%"+classes_name+"%"));
+		}
+		if(MyStringUtil.isNotEmpty(profession_name)) {
+			dc = dc.createCriteria("profession");
+			dc.add(Restrictions.like("name", "%"+profession_name+"%"));
+		}
+		if(MyStringUtil.isNotEmpty(college_name)) {
+			dc = dc.createCriteria("college");
+			dc.add(Restrictions.like("name", "%"+college_name+"%"));
+		}
+		//排序
+		//dc.addOrder(Order.desc("id"));
+		
+		Pager<Student> pager = stuService.findStudentsPagerByCriteria(dc , currentPage, pageSize);
+		
+		List<Student> studentsResult = pager.getDataList();
+		for (Student student : studentsResult) {
+			student.setClasses(null);
+			student.setGoingRecord(null);
+			student.setTimecards(null);
+		}
+		
+		dataMap.put("success", true);
+		PagerUtil.setPagerToDataMap(dataMap, pager,"students",studentsResult);
+		
+		return "json";
+	}
 	public String list() throws Exception {
 		List<Student> students = stuService.findAllStudents();
+		//List<Student> dataList = new ArrayList<>();
 		for (Student student : students) {
-			if(student.getClasses()!=null) {
+			/*if(student.getClasses()!=null) {
 				if(!CollectionUtils.isEmpty(student.getClasses().getStudents()))
 					student.getClasses().getStudents().clear();
 				
@@ -245,7 +349,18 @@ public class StudentAction extends ActionSupport {
 					}
 				}
 			}
+			student.setClasses(null);*/
+//			Student stu = new Student();
+//			stu.setId(student.getId());
+//			stu.setIdCard(student.getIdCard());
+//			stu.setName(student.getName());
+//			stu.setPasswd(student.getPasswd());
+//			stu.setSex(student.getSex());
+//			stu.setTel(student.getTel());
+//			dataList.add(stu);
 			student.setClasses(null);
+			student.setGoingRecord(null);
+			student.setTimecards(null);
 		}
 		dataMap.put("students", students);
 		return "json";

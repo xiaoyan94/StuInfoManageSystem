@@ -69,11 +69,7 @@ public class TimecardAction extends ActionSupport {
 	public String getSignedStudents() {
 		setDataMap(new HashMap<>());
 		List<Student> signedStudentByDate = timecardService.getSignedStudentByDate(new Date());
-		if(!CollectionUtils.isEmpty(signedStudentByDate)) {
-			dataMap.put("status", SUCCESS);
-		}else {
-			dataMap.put("status", "failed");
-		}
+		dataMap.put("status", SUCCESS);
 		List<Map<String,Object>> list = new ArrayList<>();
 		for (Student student : signedStudentByDate) {
 			Map<String,Object> map = new HashMap<>();

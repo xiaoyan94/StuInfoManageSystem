@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import bean.Student;
 import dao.StudentDao;
 import service.StudentService;
+import utils.Pager;
 
 @Transactional
 public class StudentServiceImpl implements StudentService {
@@ -85,6 +86,18 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public List<?> getStudentsCountGroupByGoingRecordAddress() {
 		return stuDao.getStudentsGroupByGoingRecordAddress();
+	}
+	@Override
+	public Pager<Student> findStudentsPagerByCriteria(DetachedCriteria dc, int currentPage, int pageSize) {
+		//查询总记录数
+		Long studentCount = stuDao.getStudentCount(dc);
+		//根据总记录数、当前页、每页大小建立Pager对象
+		Pager<Student> p = new Pager<>(studentCount,currentPage,pageSize);
+		//根据pager对象的当前页和每页大小查询分页数据
+		List<Student> dataList = stuDao.getStudentList(dc,p.getCurrentPage(),p.getPageSize());
+		//将分页数据放进pager对象中
+		p.setDataList(dataList );
+		return p;
 	}
 
 }

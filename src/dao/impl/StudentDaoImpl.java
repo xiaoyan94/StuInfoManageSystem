@@ -7,6 +7,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
 import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 import org.springframework.util.CollectionUtils;
@@ -94,6 +95,33 @@ public class StudentDaoImpl extends HibernateDaoSupport implements StudentDao {
 				return query.list();
 			}
 		});
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Student> getStudentList(DetachedCriteria dc, int currentPage, int pageSize) {
+		int startIdx = (currentPage-1)*pageSize;
+		return (List<Student>) getHibernateTemplate().findByCriteria(dc,startIdx ,pageSize);
+	}
+
+	@Override
+	public Long getStudentTotalCount() {
+		return getHibernateTemplate().execute(new HibernateCallback<Long>() {
+			@Override
+			public Long doInHibernate(Session session) throws HibernateException {
+				String hql = "select count(*) from Student";
+				Query query = session.createQuery(hql );
+				return (Long) query.uniqueResult();
+			}
+		});
+	}
+
+	@Override
+	public Long getStudentCount(DetachedCriteria dc) {
+		dc.setProjection(Projections.rowCount());//进行分页查询总记录数
+		Long res = (Long) getHibernateTemplate().findByCriteria(dc).get(0);
+		dc.setProjection(null);//设为null取消查询总记录数，可以继续进行正常分页查询
+		return res;
 	}
 
 }

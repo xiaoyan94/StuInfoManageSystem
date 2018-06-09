@@ -5,10 +5,10 @@
 <!DOCTYPE html>
   <html>
     <head>
-      <!--Import Google Icon Font-->
-      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import Google Icon Font-->   
+	  <link href="css/icon.css" rel="stylesheet">
       <!--Import materialize.css-->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+      <link rel="stylesheet" href="css/materialize-0.98.2.min.css">
 
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -83,13 +83,13 @@
           </ul>
         </div>
         <div class="nav-content">
-          <ul id="tab1" class="tabs tabs-transparent">
-              <li class="tab col s3"><a class="active" href="#test1">普通管理员</a></li>
-              <li class="tab col s3"><a href="#test2" onclick="refresh_student_list()">学生用户</a></li>
-              <li class="tab col s3"><a href="#test3" onclick="refresh_college_list()">学院管理</a></li>
-              <li class="tab col s3"><a href="#test4" onclick="refresh_profession_list()">专业管理</a></li>
-              <li class="tab col s3"><a href="#test5" onclick="refresh_classes_list()">班级管理</a></li>
-              <li class="tab col s3"><a href="#test6" onclick="refresh_going_list()">去向管理</a></li>
+          <ul id="tab1" class="tabs tabs-transparent col s12">
+              <li class="tab col s2"><a class="active" href="#test1">普通管理员</a></li>
+              <li class="tab col s2"><a href="#test2" onclick="refresh_student_list()">学生用户</a></li>
+              <li class="tab col s2"><a href="#test3" onclick="refresh_college_list()">学院管理</a></li>
+              <li class="tab col s2"><a href="#test4" onclick="refresh_profession_list()">专业管理</a></li>
+              <li class="tab col s2"><a href="#test5" onclick="refresh_classes_list()">班级管理</a></li>
+              <li class="tab col s2"><a href="#test6" onclick="refresh_going_list()">去向管理</a></li>
           </ul>
         </div>
       </nav>
@@ -129,10 +129,10 @@
 
       </div>
       <!-- ./container结束 -->
-      <div style="height:500px"></div>
+      <div style="height:0px"></div>
       <!--Import jQuery before materialize.js-->
-      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+      <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+      <script src="js/materialize-0.98.2.min.js"></script>
       <script>
         $(document).ready(function(){
         	

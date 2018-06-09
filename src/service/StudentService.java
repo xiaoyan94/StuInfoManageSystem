@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 
 import bean.Student;
+import utils.Pager;
 
 public interface StudentService {
 	void add(Student stu);
@@ -16,6 +17,7 @@ public interface StudentService {
 	void update(Student stu);
 	List<Student> findAllStudents();
 	List<Student> findStudentsByCriteria(DetachedCriteria dc);
+	Pager<Student> findStudentsPagerByCriteria(DetachedCriteria dc,int currentPage,int pageSize);
 	String getAllStudentsToJson();
 	
 	List<?> getStudentsCountGroupByGoingName();

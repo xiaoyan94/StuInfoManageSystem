@@ -8,12 +8,17 @@
 <title>欢迎登录</title>
 <link type="text/css" rel="stylesheet" href="css/materialize.min.css"
 	media="screen,projection" />
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<script type="text/javascript" src="js/materialize.min.js"></script>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/myjs/click.js"></script>
+<script src="js/materialize-1.0.0-beta.min.js"></script>
+<%-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script> --%>
 <script type="text/javascript">
 	
 	
 	$(function() {
+		// 鼠标特效
+		myclick($);
+		//
 		if(''!='${msg}'){
 			M.toast({html: '${msg}', classes: 'rounded', displayLength:4000});
 		}
@@ -45,28 +50,30 @@
 </script>
 </head>
 <body>
-	<div class="container">
+	<div class="container" style="text-align: center;width: 400px;">
 		<div class="section"></div>
-		<div class="row" style="width: 400px;">
-			<div class="container">
+		<div class="row" style="width: 100%;">
+			<div class="col s12">
 				<img class="responsive-img" style="width: 250px;"
 					src="https://i.imgur.com/ax0NCsK.gif" />
 				<h5 class="indigo-text">科大校外学生管理系统</h5>
 				<div class="section"></div>
 			</div>
-				<div class="section"></div>
+			<div class="section"></div>
 
 			<form id="form" class="col s12" method="post" action="loginAction_login">
 				<div class="row">
 					<div class="col s12 offset-s0">
-						<label> <span>登录身份</span></label> <label> <input <s:if test="#session.role==0">checked</s:if>
-							class="with-gap" name="role" type="radio" required="required" value="0" /> <span>学生</span>
-						</label> <label> <input class="with-gap" name="role"
-							type="radio" required="required" value="1" <s:if test="#session.role==1">checked</s:if>/> <span>普通管理员</span>
-						</label>
-						<label> <input class="with-gap" name="role"
-							type="radio" required="required" value="2" <s:if test="#session.role==2">checked</s:if>/> <span>系统管理员</span>
-						</label>
+						<label> <span>登录身份</span></label> 
+						<input <s:if test="#session.role==0">checked</s:if>
+							class="with-gap" id="role0" name="role" type="radio" required="required" value="0" />
+						<label for="role0"><span>学生</span></label>
+						<input class="with-gap" id="role1" name="role"
+							type="radio" required="required" value="1" <s:if test="#session.role==1">checked</s:if>/>
+						<label for="role1"><span>普通管理员</span></label>
+						<input class="with-gap" id="role2" name="role"
+							type="radio" required="required" value="2" <s:if test="#session.role==2">checked</s:if>/>
+						<label for="role2"><span>系统管理员</span></label>
 					</div>
 				</div>
 				<div class="row">
