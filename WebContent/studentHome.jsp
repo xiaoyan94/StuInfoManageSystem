@@ -66,10 +66,10 @@
       </div>
       <!-- DROPDOWN -->
       <ul id="dropdown1" class="dropdown-content">
-        <li><a href="#!">个人信息</a></li>
-        <li><a href="#!">密码修改</a></li>
+        <li><a href="javascript:$('ul.tabs').tabs('select_tab', 'edit-student');">个人信息</a></li>
+        <li><a href="javascript:$('ul.tabs').tabs('select_tab', 'edit-student');$('ul.tabs').tabs('select_tab', 'edit_t3');">密码修改</a></li>
         <li class="divider"></li>
-        <li><a href="#logout">注销</a></li>
+        <li><a href="javascript:$('#logout').modal('open');">注销</a></li>
       </ul>
       <nav class="nav-extended active lighten-1" >
         <div class="nav-wrapper">
@@ -77,21 +77,21 @@
           <a href="" class="brand-logo center">科大校外学生管理</a>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="#">首页</a></li>
-            <li><a href="#!" class="dropdown-button" data-activates="dropdown1" data-beloworigin="true">欢迎您，<s:property value="#session.student.name"/><i class="material-icons right">arrow_drop_down</i></a></li>
+            <li ><a href="#!" class="dropdown-button" data-activates="dropdown1" data-beloworigin="true">欢迎您，<s:property value="#session.student.name"/><i class="material-icons right">arrow_drop_down</i></a></li>
           </ul>
-          <ul id="dropdown1" class="dropdown-content">
+          <!-- <ul id="dropdown1" class="dropdown-content">
             <li><a href="#!">个人信息</a></li>
             <li><a href="#!">密码修改</a></li>
             <li class="divider"></li>
             <li><a href="#logout">注销</a></li>
-          </ul>
+          </ul> -->
         </div>
         <div class="nav-content">
           <ul id="tab1" class="tabs tabs-transparent">
               <li class="tab col s3"><a class="active" href="#sign">考勤签到</a></li>
               <li class="tab col s3"><a href="#edit-student" onclick="edit_student(${student.id})">个人信息管理</a></li>
               <li class="tab col s3"><a href="#liuyan_tab" onclick="">留言沟通</a></li>
-              <li class="tab col s3"><a href="#notice_tab" onclick="">公告通知</a></li>
+              <li class="tab col s3"><a href="#notice_tab" onclick="refresh_notice_list()">公告通知</a></li>
               <!-- <li class="tab col s3 disabled"><a href="" onclick="">更多</a></li> -->
           </ul>
         </div>
@@ -100,37 +100,7 @@
       <div class="container" style="width: 80%">
         <%@include file="studentHome_qiandao.jsp" %>
         <%@include file="studentHome_edit.jsp" %>
-        <!-- tab3 开始 -->
-        		<div id="notice_tab" class="col s12">
-		  <ul class="collapsible popout" data-collapsible="expandable">
-		    <li class="active">
-		      <div class="collapsible-header active"><i class="material-icons">filter_drama</i>公告标题一</div>
-		      <div class="collapsible-body">
-		      	<p>内容：人的一生，其实就是一场自己对自己的战争。</p>
-		      </div>
-		    </li>
-		    <li class="active">
-		      <div class="collapsible-header active"><i class="material-icons">place</i>二</div>
-		      <div class="collapsible-body"><p>人的一生，其实就是一场自己对自己的战争。</p></div>
-		    </li>
-		    <li class="active">
-		      <div class="collapsible-header active"><i class="material-icons">whatshot</i>三</div>
-		      <div class="collapsible-body"><p>人的一生，其实就是一场自己对自己的战争。</p></div>
-		    </li>
-		  </ul>
-		  
-		  <div class="fixed-action-btn">
-          <a class="btn-floating btn-large red oulse">
-            <i class="large material-icons">add</i>
-          </a>
-          <ul>
-            <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
-            <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
-            <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
-            <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
-          </ul>
-        </div>
-		</div>
+        <%@include file="studentHome_notice_tab.jsp" %>
 		
 		<div id="liuyan_tab" class="col s12">
 		  <ul class="collapsible popout" data-collapsible="accordion">
@@ -179,8 +149,9 @@
       </div>
       <!-- ./container结束 -->
       <!--Import jQuery before materialize.js-->
-      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <%-- <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> --%>
       <%-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script> --%>
+      <script src="js/jquery-2.1.1.min.js" type="text/javascript"></script>
       <script src="js/materialize.min.js"></script>
       <script type="text/javascript" src="js/myjs/calendar.js"></script>
       <script type="text/javascript" src="js/myjs/userManage.js"></script>

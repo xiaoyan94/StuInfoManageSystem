@@ -66,6 +66,7 @@ public class LoginAction extends ActionSupport {
 				Student existStu = studentService.findByUsernameAndPasswd(stu);
 				if(existStu!=null) {
 					ActionContext.getContext().getSession().put("student", existStu);
+					ActionContext.getContext().getSession().put("user", existStu);
 					ActionContext.getContext().getSession().put("msg", "登录成功");
 					result = "toStudentAction";
 				}else {
@@ -76,8 +77,21 @@ public class LoginAction extends ActionSupport {
 				ActionContext.getContext().getSession().put("msg", "用户名或密码错误");
 				result = "toLogin";
 			}
+			break;
 		case "1":
 			//普通管理员登录
+			Admin existAdmin0 = adminService.getAdminByUsernameAndPasswd(username, password);
+			System.out.println(existAdmin0);
+			if(existAdmin0 == null) {
+				//只在转发时有效
+				//this.addActionError("用户名或密码错误！");
+				ActionContext.getContext().getSession().put("msg", "用户名或密码错误");
+				result = "toLogin";
+			}else {
+				ActionContext.getContext().getSession().put("user", existAdmin0);
+				ActionContext.getContext().getSession().put("msg", "登录成功");
+				result = "toAdminAction_show";
+			}
 			break;
 		case "2":
 			//系统管理员登录

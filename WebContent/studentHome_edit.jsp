@@ -114,7 +114,7 @@
 			<div id="edit_t3" class="col s12" style="height: 300px">
 				<div class="section"></div>
 				<div class="input-field col s6">
-					<i class="material-icons prefix">vpn_key</i> <input readonly="readonly"
+					<i class="material-icons prefix">vpn_key</i> <input 
 						required="required" id="edit_student_password" name="password"
 						type="password" class="validate" data-length="20" value=" ">
 					<label for="edit_student_password">登录密码</label>

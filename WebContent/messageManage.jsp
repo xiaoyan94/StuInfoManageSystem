@@ -216,9 +216,16 @@
     
 		<div id="notice_tab" class="col s12">
 		  <ul id="notice_ul" class="collapsible popout" data-collapsible="expandable">
-		    
 		  </ul>
-		  
+		  <!-- 分页 -->
+			<div class="row center">
+				<ul class="pagination" id="notice_pager">
+				    <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+				    <li class="active blue lighten-2"><a href="#!">1</a></li>
+				    <li class="waves-effect"><a href="#!">2</a></li>
+				    <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+				</ul>
+			</div>
 		<div class="fixed-action-btn">
           <a href="#!" onclick="get_add_focus()" class="btn-floating btn-large red oulse">
             <i class="large material-icons">add</i>

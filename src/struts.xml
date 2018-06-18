@@ -19,7 +19,7 @@
 			<!-- 注册拦截器栈 -->
 			<interceptor-stack name="myStack">
 				<interceptor-ref name="loginInterceptor">
-					<param name="excludeMethods">loginPage,login,toLogin,testjson,*</param>
+					<param name="excludeMethods">loginPage,login,toLogin,testjson</param>
 				</interceptor-ref>
 				<interceptor-ref name="defaultStack"></interceptor-ref>
 			</interceptor-stack>

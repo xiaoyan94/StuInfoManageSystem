@@ -84,7 +84,9 @@
         </div>
         <div class="nav-content">
           <ul id="tab1" class="tabs tabs-transparent col s12">
+          	<s:if test="#session.user.adminRole==1">
               <li class="tab col s2"><a class="active" href="#test1">普通管理员</a></li>
+            </s:if>
               <li class="tab col s2"><a href="#test2" onclick="refresh_student_list()">学生用户</a></li>
               <li class="tab col s2"><a href="#test3" onclick="refresh_college_list()">学院管理</a></li>
               <li class="tab col s2"><a href="#test4" onclick="refresh_profession_list()">专业管理</a></li>
@@ -96,7 +98,9 @@
       <div class="section"></div>
       <div class="container" style="width: 80%">
         <!-- TABS test1开始 普通管理员 -->
+        <s:if test="#session.user.adminRole==1">
         <%@include file="userManage_tab1.jsp" %>
+        </s:if>
         <!-- tab1 test1普通管理员结束 -->
 
         <!-- tab2 学生开始 -->
@@ -133,6 +137,7 @@
       <!--Import jQuery before materialize.js-->
       <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
       <script src="js/materialize-0.98.2.min.js"></script>
+      <script type="text/javascript" src="js/myjs/userManage.js"></script>
       <script>
         $(document).ready(function(){
         	
@@ -186,8 +191,11 @@
         //解决单选按钮不显示
         // $(":radio").css("position","unset");
         // $(":radio").css("opacity","1");
+        
+        <s:if test="#session.user.adminRole==0">
+       		 refresh_student_list();
+        </s:if>
       </script>
-      <script type="text/javascript" src="js/myjs/userManage.js"></script>
     </body>
   </html>
     

@@ -45,9 +45,9 @@ public class TimecardAction extends ActionSupport {
 			List<Timestamp> times = new ArrayList<>();
 			int i=0;
 			for (Timecard timecard : byStudent) {
-				if(i++<10) {
+//				if(i++<10) {
 					times.add(timecard.getTime());
-				}
+//				}
 			}
 			dataMap.put("timecards", times);
 		}else {

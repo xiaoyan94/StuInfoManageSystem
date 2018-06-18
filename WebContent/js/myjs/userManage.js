@@ -512,7 +512,17 @@ function refresh_college_list() {
 }
 //--------------------------------------------------------
 function refresh_student_list(){
+	$('#search_student_form')[0].reset();
 	var params={currentPage:1};
+	search_student(params);
+}
+function search_student_page(params){
+	x=$('#search_student_form').serializeArray();
+	$.each(x, function(i, field){
+		//遍历JSON数组
+		//alert(field.name + ":" + field.value + " ");
+		params[field.name] = field.value;
+	});
 	search_student(params);
 }
 function submit_search_student_form(){
@@ -564,7 +574,7 @@ function search_student(params){
 	    		$('#student_list_table').append(row);
 	    	}//生成表格结束
 	    	
-	    	create_pagination('#students_pager',data,'search_student');
+	    	create_pagination('#students_pager',data,'search_student_page');
 //	    	$('#students_pager').empty();
 //	    	var pre;
 //	    	if(data.currentPage==1){

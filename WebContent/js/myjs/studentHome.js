@@ -164,3 +164,100 @@ function initTimecards(){
 		"async" : true
 	});
 }
+
+//notice-----------------------------------------------------
+function refresh_notice_list(){
+	search_notice({'pageSize':5});
+}
+function search_notice(params){
+	$("#notice_ul").empty();
+	$('#preloading').css('display','block');
+	$('#notice_pager').css('display','none');
+	$.ajax({
+		"url" : "${pageContext.request.contextPath}/noticeAction_list",
+		"data" : params,
+		"dataType" : "json",
+		"success" : function(data) {
+			$('#preloading').css('display','none');
+			$('#notice_pager').css('display','block');
+			if(data.success==true){
+				$(data.notice).each(function(i,e){
+					var date = new Date(e.time);
+					var time = date.getFullYear()+'年'
+						+date.getMonth()+'月'
+						+date.getDate()+'日'+'&nbsp;&nbsp;'
+						+date.getHours()+'时'
+						+date.getMinutes()+'分'
+						+date.getSeconds()+'秒';
+					var row = `
+			<li>
+		      <div class="row collapsible-header active" style="margin-right:0;margin-left:0">
+			      <div calss="col s6">
+				      <i class="material-icons">filter_drama</i>
+				   	  <span>${i+1}. </span>
+				   	  <span> ${e.title}</span>
+			      </div>
+			      <div class="col s6">
+					  <a>发布人：${e.admin.adminName}(${e.admin.adminRealName})</a>
+				      <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				      <a>发布时间：${time}</a>
+			      </div>
+		      </div>
+		      <div class="collapsible-body">
+		      	<div class="row" style="margin-bottom:0;">
+		      	<p>通知内容：${e.content}</p>
+		      	
+		      	</div>
+		      </div>
+		    </li>
+					`;
+					$("#notice_ul").append(row);
+				});
+				create_pagination('#notice_pager',data,'search_notice_page');
+				$('.collapsible').collapsible();
+				Materialize.toast('刷新成功', 1500, 'rounded');
+			}
+		},
+		"async" : true
+	});
+}
+
+//生成分页导航
+function create_pagination(selector,data,function_name){
+	$(selector).empty();
+	var pre;
+	if(data.currentPage==1){
+		pre = `<li class="disabled"><a href="javascript:Materialize.toast('没有更多数据啦', 2000, 'rounded')"><i class="material-icons">chevron_left</i></a></li>`;
+	}else{
+		pre = `<li class="waves-effect"><a href="javascript:${function_name}(${data.currentPage-1},${data.pageSize})"><i class="material-icons">chevron_left</i></a></li>`;
+	}
+	$(selector).append(pre);
+	for(var i = data.currentPage>4 ? data.currentPage-4 : 0;i<data.totalPage && i<data.currentPage+3;i++){
+		var li = `<li class="waves-effect ${data.currentPage==i+1?' active blue lighten-2':' '}"><a href="javascript:${function_name}(${i+1},${data.pageSize})">${i+1}</a></li>`;
+		$(selector).append(li);
+	}//生成分页数据
+	var next;
+	if(data.currentPage==data.totalPage){
+		next = `<li class="disabled"><a href="javascript:Materialize.toast('没有更多数据啦', 2000, 'rounded')"><i class="material-icons">chevron_right</i></a></li>`;
+	}else{
+		next = `<li class="waves-effect"><a href="javascript:${function_name}(${data.currentPage+1},${data.pageSize})"><i class="material-icons">chevron_right</i></a></li>`;
+	}
+	$(selector).append(next);
+	var total=`<li class="waves-effect"><a>第${data.currentPage}页，共${data.totalPage}页</a></li>`;
+	$(selector).append(total);
+}
+function submit_search_notice_form(){
+	$('#search_notice_modal').modal("close");
+	search_notice_page(1,5);
+}
+function search_notice_page(currentPage,pageSize){
+	search_notice({
+		'pageSize':pageSize,
+		'currentPage':currentPage,
+		'searchKey':$('#search_notice_key').val()
+		});
+}
+function get_search_focus(){
+	$('#search_notice_modal').modal('open');
+	$('#search_notice_key').focus();
+}
